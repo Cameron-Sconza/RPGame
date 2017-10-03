@@ -125,14 +125,15 @@ void LoadGame() {
 	}
 }
 
-bool SaveGame(Character player);
-bool Hunt(Character player);
-bool Shop(Character player);
-bool Rest(Character player);
+void SaveGame(Character player);
+void Hunt(Character player);
+void Shop(Character player);
+void Rest(Character player);
 
 void PlayGame(Character player) {
 	bool playing;
 	do {
+		playing = true;
 		Character c = player;
 		int choice = 0;
 		do {
@@ -154,13 +155,13 @@ void PlayGame(Character player) {
 		switch (choice)
 		{
 		case(1):
-			playing = SaveGame(c);
+			SaveGame(c);
 		case(2):
-			playing = Hunt(c);
+			Hunt(c);
 		case(3):
-			playing = Shop(c);
+			Shop(c);
 		case(4):
-			playing = Rest(c);
+			Rest(c);
 		case(5):
 			playing = false;
 		default:
@@ -171,7 +172,7 @@ void PlayGame(Character player) {
 	main();
 }
 
-bool SaveGame(Character player) {
+void SaveGame(Character player) {
 	Character c = player;
 	ofstream IO;
 	IO.open("C:\\Users\\Onshore\\source\\repos\\RPGTestGame\\Saves.txt");
@@ -191,7 +192,7 @@ bool SaveGame(Character player) {
 
 void LevelUp(Character player);
 
-bool Hunt(Character player) {
+void Hunt(Character player) {
 
 }
 
@@ -199,11 +200,11 @@ void LevelUp(Character player) {
 	cout << "" << endl;
 }
 
-bool Shop(Character player) {
+void Shop(Character player) {
 
 }
 
-bool Rest(Character player) {
+void Rest(Character player) {
 
 }
 
