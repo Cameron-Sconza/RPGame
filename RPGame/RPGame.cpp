@@ -3,12 +3,13 @@
 
 #include "stdafx.h"
 #include "Character.h"
+#include "Console.h"
 using namespace std;
 
 void NewGame();
 void LoadGame();
-
-void main() {
+Console console;
+int main() {
 	int mainMenu = 0;
 	do {
 		string mainMenuStr;
@@ -32,6 +33,7 @@ void main() {
 	}
 	else {
 		cout << "Closing Application." << endl;
+		return 0;
 	}
 }
 
@@ -91,7 +93,7 @@ void NewGame() {
 		c.backpack.push_back("Simple Clothes");
 	}
 	ofstream IO;
-	IO.open("C:\\Users\\Onshore\\source\\repos\\RPGTestGame\\Saves.txt");
+	IO.open("C:\\Users\\Onshore\\Documents\\Visual Studio 2017\\Projects\\RPGame\\Save.txt");
 	IO << c.name << endl
 		<< c.CharacterClass << endl << c.level << endl
 		<< c.strength << endl << c.dexterity << endl
@@ -108,7 +110,7 @@ void NewGame() {
 
 void LoadGame() {
 	ifstream IO;
-	IO.open("C:\\Users\\Onshore\\source\\repos\\RPGTestGame\\Saves.txt");
+	IO.open("C:\\Users\\Onshore\\Documents\\Visual Studio 2017\\Projects\\RPGame\\Save.txt");
 	if (IO.is_open()) {
 		ostringstream ss;
 		ss << IO.rdbuf();
@@ -126,13 +128,14 @@ void LoadGame() {
 }
 
 void SaveGame(Character player);
-void Hunt(Character player);
-void Shop(Character player);
-void Rest(Character player);
+Character Hunt(Character player);
+Character Shop(Character player);
+Character Rest(Character player);
 
 void PlayGame(Character player) {
 	bool playing;
 	do {
+		console.ClearScreen();
 		playing = true;
 		Character c = player;
 		int choice = 0;
@@ -156,18 +159,21 @@ void PlayGame(Character player) {
 		{
 		case(1):
 			SaveGame(c);
+			break;
 		case(2):
-			Hunt(c);
+			c = Hunt(c);
+			break;
 		case(3):
-			Shop(c);
+			c = Shop(c);
+			break;
 		case(4):
-			Rest(c);
+			c = Rest(c);
+			break;
 		case(5):
 			playing = false;
-		default:
-			cout << "Something Fucked Up." << endl;
 			break;
 		}
+
 	} while (playing);
 	main();
 }
@@ -175,7 +181,7 @@ void PlayGame(Character player) {
 void SaveGame(Character player) {
 	Character c = player;
 	ofstream IO;
-	IO.open("C:\\Users\\Onshore\\source\\repos\\RPGTestGame\\Saves.txt");
+	IO.open("C:\\Users\\Onshore\\Documents\\Visual Studio 2017\\Projects\\RPGame\\Save.txt");
 	IO << c.name << endl
 		<< c.CharacterClass << endl << c.level << endl
 		<< c.strength << endl << c.dexterity << endl
@@ -187,24 +193,51 @@ void SaveGame(Character player) {
 	}
 	IO.clear();
 	IO.close();
-	return true;
 }
 
-void LevelUp(Character player);
+Character LevelUp(Character player);
 
-void Hunt(Character player) {
-
+Character Hunt(Character player) {
+	Character c = player; 
+	bool hunting;
+	do {
+		hunting = true;
+		cout << "What would you like to hunt?" << endl
+			<< "1. Small Game." << endl
+			<< "2. Monsters." << endl
+			<< "3. Back." << endl;
+	} while (hunting);
+	return c;
 }
 
-void LevelUp(Character player) {
-	cout << "" << endl;
+Character LevelUp(Character player) {
+	Character c = player;
+	cout << "You Leveled Up!" << endl;
+	c.level++;
+	c.currentExp = 0;
+	c.nextLevelExp = ceil((c.nextLevelExp * 5) / 2);
+	c.maxHealthPoints = ceil((((c.level*c.strength + (c.dexterity*c.level) / 2)) / 2) + 20);
+	c.currentHealthPoints = c.maxHealthPoints;
+	return c;
 }
 
-void Shop(Character player) {
-
+Character Shop(Character player) {
+	Character c = player;
+	bool shopping;
+	do {
+		shopping = true;
+		cout << "Where would you like to Shop?" << endl
+			<< "1. MainHand" << endl
+			<< "2. OffHand" << endl
+			<< "2. Armour" << endl;
+	} while (shopping);
+	return c;
 }
 
-void Rest(Character player) {
-
+Character Rest(Character player) {
+	Character c = player;
+	cout << "You rest at a nearby Shrine, and your wounds have time to heal." << endl;
+	c.currentHealthPoints = c.maxHealthPoints;
+	return c;
 }
 

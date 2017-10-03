@@ -33,5 +33,6 @@ void Character::setcharvalues(std::string allstats) {
 			backpack.push_back(temp);
 		}
 	} while (!temp.empty());
-	healthpoints = ceil(((level*strength) / 2) + 20);
+	maxHealthPoints = ceil((((level*strength + (dexterity*level) / 2)) / 2) + 20);
+	currentHealthPoints = maxHealthPoints;
 }

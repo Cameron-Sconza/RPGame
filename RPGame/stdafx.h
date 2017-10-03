@@ -15,6 +15,14 @@
 #include <string>
 #include <sstream>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
+#ifdef _linux_
+#include <unistd.h>
+#include <term.h>
+#endif
 
 
 // TODO: reference additional headers your program requires here

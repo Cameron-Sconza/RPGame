@@ -13,11 +13,9 @@ public:
 	int intellegence;
 	int currentGold;
 	int currentExp;
-	int nextLevelExp;
-	//int mainHandId;
-	//int offHandID;
-	//int armourID;
-	double healthpoints;
+	double nextLevelExp;
+	double currentHealthPoints;
+	double maxHealthPoints;
 	std::string name;
 	std::string CharacterClass;
 	std::list<std::string> backpack;
