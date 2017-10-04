@@ -18,7 +18,7 @@ public:
 	double maxHealthPoints;
 	std::string name;
 	std::string CharacterClass;
-	std::list<std::string> backpack;
+	std::vector<std::string> backpack;
 	MainHand * mainHand;
 	OffHand * offHand;
 	Armour * armour;

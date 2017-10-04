@@ -4,19 +4,21 @@
 #include "stdafx.h"
 #include "Character.h"
 #include "Console.h"
+#include "Monsters.h"
 using namespace std;
 
 void NewGame();
 void LoadGame();
 Console console;
+
 int main() {
 	int mainMenu = 0;
 	do {
 		string mainMenuStr;
 		int attemptCount = 0;
-		cout << "Please Select Numbered Option Below" << endl
-			<< "1. New Game." << endl
-			<< "2. Continue Game." << endl
+		cout << "Please Select Numbered Option Below" << '\n'
+			<< "1. New Game." << '\n'
+			<< "2. Continue Game." << '\n'
 			<< "3. Quit" << endl;
 		cin >> mainMenuStr;
 		stringstream(mainMenuStr) >> mainMenu;
@@ -51,9 +53,9 @@ void NewGame() {
 	do {
 		string choiceStr;
 		int attemptCount = 0;
-		cout << "What class is this Character?" << endl
-			<< "1. Warrior" << endl
-			<< "2. Rouge" << endl
+		cout << "What class is this Character?" << '\n'
+			<< "1. Warrior" << '\n'
+			<< "2. Rouge" << '\n'
 			<< "3. Wizard" << endl;
 		cin >> choiceStr;
 		stringstream(choiceStr) >> choice;
@@ -142,11 +144,11 @@ void PlayGame(Character player) {
 		do {
 			string choiceStr;
 			int attemptCount = 0;
-			cout << "Please Select Numbered Option Below" << endl
-				<< "1. Save Game." << endl
-				<< "2. Hunt." << endl
-				<< "3. Shop." << endl
-				<< "4. Rest." << endl
+			cout << "Please Select Numbered Option Below" << '\n'
+				<< "1. Save Game." << '\n'
+				<< "2. Hunt." << '\n'
+				<< "3. Shop." << '\n'
+				<< "4. Rest." << '\n'
 				<< "5. Quit." << endl;
 			cin >> choiceStr;
 			stringstream(choiceStr) >> choice;
@@ -196,17 +198,111 @@ void SaveGame(Character player) {
 }
 
 Character LevelUp(Character player);
+int Death(int currentHealthPoints);
+void Fight(Monsters monster, Character character);
 
 Character Hunt(Character player) {
-	Character c = player; 
+	Character c = player;
 	bool hunting;
 	do {
+		console.ClearScreen();
 		hunting = true;
-		cout << "What would you like to hunt?" << endl
-			<< "1. Small Game." << endl
-			<< "2. Monsters." << endl
-			<< "3. Back." << endl;
-	} while (hunting);
+		int choice = 0;
+		do {
+			string choiceStr;
+			int fail = 0;
+			cout << "What would you like to hunt?" << '\n'
+				<< "1. Small Game." << '\n'
+				<< "2. Monsters." << '\n'
+				<< "3. Back." << endl;
+			if (fail > 3) {
+				cout << "Please Use the Number." << endl;
+			}
+			cin >> choiceStr;
+			stringstream(choiceStr) >> choice;
+			fail++;
+		} while (!(choice >= 1 && choice <= 3) || choice == 0);
+		if (choice == 1) {
+			int rand = console.RandomNumber();
+			if (rand <= 40) {
+				cout << "You managed to find hunt down some rabbits and birds, but nothing worth while." << endl;
+				c.backpack.push_back("Raw Meat");
+				console.Sleep(3);
+			}
+			else if (rand > 40 && rand <= 70) {
+				cout << "This was a good hunt. You managed to run into a small family of Deer." << endl;
+				c.backpack.push_back("Raw Meat");
+				c.backpack.push_back("Raw Meat");
+				c.backpack.push_back("Raw Meat");
+				c.backpack.push_back("Raw Meat");
+				c.backpack.push_back("Raw Hide");
+				c.backpack.push_back("Raw Hide");
+				console.Sleep(3);
+			}
+			else if (rand > 70 && rand <= 90) {
+				cout << "You fail to find animals of any sorts." << endl;
+				console.Sleep(3);
+			}
+			else if (rand > 90 && rand > 100) {
+				cout << "Something managed to hunt you instead." << '\n'
+					<< "You lose 5 health." << endl;
+				c.currentHealthPoints -= 5;
+				Death(c.currentHealthPoints);
+			}
+			else if (rand == 100) {
+				cout << "You were seen by a Dragon." << endl;
+				int newRand = console.RandomNumber();
+				if (newRand <= 50) {
+					cout << "You manage to hide in the bushes." << endl;
+				}
+				else if (newRand > 50 && newRand <= 80) {
+					cout << "It noticed you and tried to kill you." << endl;
+					c.currentHealthPoints -= 25;
+					Death(c.currentHealthPoints);
+				}
+				else {
+					cout << "It Manages to get a direct hit on you." << endl;
+					c.currentHealthPoints -= 50;
+					Death(c.currentHealthPoints);
+				}
+			}
+		}
+		else if (choice == 2) {
+			int secondChoice = 0;
+			do {
+				string choiceStr;
+				int fail = 0;
+				cout << "Which Monster would you like to hunt?" << '\n'
+					<< "1. Goblin." << '\n'
+					<< "2. Hobgoblin." << '\n'
+					<< "3. Ogre." << endl;
+				if (fail > 3) {
+					cout << "Please Use the Number." << endl;
+				}
+				cin >> choiceStr;
+				stringstream(choiceStr) >> secondChoice;
+				fail++;
+			} while (!(secondChoice >= 1 && secondChoice <= 3) || secondChoice == 0);
+			if (secondChoice == 1) {
+				Monsters mon;
+				mon = mon.getAllMonsters()[0];
+
+			}
+			else if (secondChoice == 2) {
+				Monsters mon;
+				mon = mon.getAllMonsters()[1];
+
+			}
+			else if (secondChoice == 3) {
+				Monsters mon;
+				mon = mon.getAllMonsters()[2];
+
+			}
+		}
+		else if (choice == 3) {
+
+		}
+	} while (false);
 	return c;
 }
 
@@ -216,9 +312,32 @@ Character LevelUp(Character player) {
 	c.level++;
 	c.currentExp = 0;
 	c.nextLevelExp = ceil((c.nextLevelExp * 5) / 2);
-	c.maxHealthPoints = ceil((((c.level*c.strength + (c.dexterity*c.level) / 2)) / 2) + 20);
+	c.maxHealthPoints = ceil((((c.level*c.strength + (c.dexterity*c.level) / 3)) / 2) + 20);
 	c.currentHealthPoints = c.maxHealthPoints;
 	return c;
+}
+
+void Fight(Monsters monster, Character character) {
+	bool fighting = true;
+	Monsters mon = monster;
+	Character c = character;
+	int choice = 0;
+	do {
+		cout << "You managed to find a " << mon.name << "." << '\n'
+			<< "1. Attack." << '\n'
+			<< "2. Defend." << '\n'
+			<< "3. Flee."<< endl;
+	} while (mon.currentHealthPoints > 0 && c.currentHealthPoints > 0 || (fighting));
+}
+
+int Death(int currentHealthPoints) {
+	if (currentHealthPoints < 0) {
+		cout << "You Have Died" << endl;
+		main();
+	}
+	else {
+		return 0;
+	}
 }
 
 Character Shop(Character player) {
@@ -226,18 +345,21 @@ Character Shop(Character player) {
 	bool shopping;
 	do {
 		shopping = true;
-		cout << "Where would you like to Shop?" << endl
-			<< "1. MainHand" << endl
-			<< "2. OffHand" << endl
-			<< "2. Armour" << endl;
-	} while (shopping);
+		cout << "What would you like to shop for?" << '\n'
+			<< "1. MainHand." << '\n'
+			<< "2. OffHand." << '\n'
+			<< "3. Armour." << '\n'
+			<< "4. Back." << endl;
+	} while (false);
 	return c;
 }
 
 Character Rest(Character player) {
+	console.ClearScreen();
 	Character c = player;
-	cout << "You rest at a nearby Shrine, and your wounds have time to heal." << endl;
+	cout << "You rest at a nearby Shrine, and your wounds have time to heal." << '\n';
 	c.currentHealthPoints = c.maxHealthPoints;
+	console.Sleep(4);
 	return c;
 }
 

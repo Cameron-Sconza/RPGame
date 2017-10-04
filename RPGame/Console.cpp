@@ -49,3 +49,13 @@ void Console::ClearScreen() {
 }
 #endif
 }
+
+void Console::Sleep(int seconds) {
+	std::this_thread::sleep_for(std::chrono::seconds(seconds));
+}
+
+int Console::RandomNumber() {
+	std::default_random_engine generator;
+	std::uniform_int_distribution<int> distribution(1, 100);
+	return distribution(generator);
+}
