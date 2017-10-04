@@ -19,17 +19,17 @@ std::vector<Monsters> Monsters::getAllMonsters()
 	{
 		Monsters mon;
 		std::string temp;
-		getline(ss, name, '\n');
+		getline(ss, mon.name, '\n');
 		(getline(ss, temp, '\n'));
-		std::stringstream(temp) >> maxHealthPoints;
+		std::stringstream(temp) >> mon.maxHealthPoints;
 		temp.clear();
 		(getline(ss, temp, '\n'));
-		std::stringstream(temp) >> attack;
+		std::stringstream(temp) >> mon.attack;
 		temp.clear();
 		(getline(ss, temp, '\n'));
-		std::stringstream(temp) >> defence;
+		std::stringstream(temp) >> mon.defence;
 		temp.clear();
-		currentHealthPoints = maxHealthPoints;
+		mon.currentHealthPoints = mon.maxHealthPoints;
 		monsterList.push_back(mon);
 	}
 	return monsterList;

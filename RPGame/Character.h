@@ -13,6 +13,8 @@ public:
 	int intellegence;
 	int currentGold;
 	int currentExp;
+	double attack;
+	double defence;
 	double nextLevelExp;
 	double currentHealthPoints;
 	double maxHealthPoints;
@@ -23,4 +25,5 @@ public:
 	OffHand * offHand;
 	Armour * armour;
 	void setcharvalues(std::string allstats);
+	void Clear();
 };

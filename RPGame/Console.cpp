@@ -55,7 +55,5 @@ void Console::Sleep(int seconds) {
 }
 
 int Console::RandomNumber() {
-	std::default_random_engine generator;
-	std::uniform_int_distribution<int> distribution(1, 100);
-	return distribution(generator);
+	return rand() % 100 + 1;
 }

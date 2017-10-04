@@ -15,17 +15,17 @@ int main() {
 	int mainMenu = 0;
 	do {
 		string mainMenuStr;
-		int attemptCount = 0;
+		int Fail = 0;
 		cout << "Please Select Numbered Option Below" << '\n'
 			<< "1. New Game." << '\n'
 			<< "2. Continue Game." << '\n'
-			<< "3. Quit" << endl;
-		cin >> mainMenuStr;
-		stringstream(mainMenuStr) >> mainMenu;
-		if (attemptCount > 3) {
+			<< "3. Quit" << endl; 
+		if (Fail > 3) {
 			cout << "Use The Number To Select an Option." << endl;
 		}
-		attemptCount++;
+		cin >> mainMenuStr;
+		stringstream(mainMenuStr) >> mainMenu;
+		Fail++;
 	} while (!(mainMenu >= 1 && mainMenu <= 3) || mainMenu == 0);
 	if (mainMenu == 1) {
 		NewGame();
@@ -136,10 +136,10 @@ Character Rest(Character player);
 
 void PlayGame(Character player) {
 	bool playing;
+	Character c = player;
 	do {
 		console.ClearScreen();
 		playing = true;
-		Character c = player;
 		int choice = 0;
 		do {
 			string choiceStr;
@@ -175,7 +175,6 @@ void PlayGame(Character player) {
 			playing = false;
 			break;
 		}
-
 	} while (playing);
 	main();
 }
@@ -197,45 +196,39 @@ void SaveGame(Character player) {
 	IO.close();
 }
 
-Character LevelUp(Character player);
-bool Death(int currentHealthPoints);
 Character HuntSmallGame(Character character);
 Character HuntMonsters(Character character);
-Character Fight(Monsters monster, Character character);
 
 Character Hunt(Character player) {
 	Character c = player;
-	bool hunting;
+	console.ClearScreen();
+	int choice = 0;
+	int fail = 0;
 	do {
-		console.ClearScreen();
-		hunting = true;
-		int choice = 0;
-		do {
-			string choiceStr;
-			int fail = 0;
-			cout << "What would you like to hunt?" << '\n'
-				<< "1. Small Game." << '\n'
-				<< "2. Monsters." << '\n'
-				<< "3. Back." << endl;
-			if (fail > 3) {
-				cout << "Please Use the Number." << endl;
-			}
-			cin >> choiceStr;
-			stringstream(choiceStr) >> choice;
-			fail++;
-		} while (!(choice >= 1 && choice <= 3) || choice == 0);
-		if (choice == 1) {
-			c = HuntSmallGame(c);
+		string choiceStr;
+		cout << "What would you like to hunt?" << '\n'
+			<< "1. Small Game." << '\n'
+			<< "2. Monsters." << '\n'
+			<< "3. Back." << endl;
+		if (fail > 3) {
+			cout << "Please Use the Number." << endl;
 		}
-		else if (choice == 2) {
-			c = HuntMonsters(c);
-		}
-		else if (choice == 3) {
-			hunting = false;
-		}
-	} while (hunting);
-	return c;
+		cin >> choiceStr;
+		stringstream(choiceStr) >> choice;
+		fail++;
+	} while (!(choice >= 1 && choice <= 3) || choice == 0);
+	if (choice == 1) {
+		return HuntSmallGame(c);
+	}
+	else if (choice == 2) {
+		return HuntMonsters(c);
+	}
+	else if (choice == 3) {
+		return c;
+	}
 }
+
+bool Death(int currentHealthPoints);
 
 Character HuntSmallGame(Character character) {
 	Character c = character;
@@ -295,6 +288,10 @@ Character HuntSmallGame(Character character) {
 	}
 }
 
+
+Character LevelUp(Character player);
+Character Fight(Monsters monster, Character character);
+
 Character HuntMonsters(Character character) {
 	Character c = character;
 	int choice = 0;
@@ -333,17 +330,112 @@ Character HuntMonsters(Character character) {
 	}
 }
 
+vector<string> LootItems(vector<string> backpack, string monsterName);
+int LootGold(string monsterName);
+int ExpGain(string monsterName);
+
 Character Fight(Monsters monster, Character character) {
 	bool fighting = true;
 	Monsters mon = monster;
 	Character c = character;
-	int choice = 0;
+	int round = 0;
 	do {
-		cout << "You managed to find a " << mon.name << "." << '\n'
-			<< "1. Attack." << '\n'
-			<< "2. Defend." << '\n'
-			<< "3. Flee."<< endl;
-	} while (mon.currentHealthPoints > 0 && c.currentHealthPoints > 0 || (fighting));
+		int choice = 0;
+		int fail = 0;
+		do {
+			console.ClearScreen();
+			string choiceStr;
+			if (round < 1) {
+				cout << "You managed to find a " << mon.name << "." << '\n';
+				cout << "Your Current Health is " << c.currentHealthPoints << '\n';
+				cout << "The " << mon.name << " Current Health is " << mon.currentHealthPoints << '\n';
+			}
+			else {
+				cout << "Your Current Health is " << c.currentHealthPoints << '\n';
+				cout << "The " << mon.name << " Current Health is " << mon.currentHealthPoints << '\n';
+			}
+			cout << "1. Attack." << '\n'
+				<< "2. Defend." << '\n'
+				<< "3. Flee." << endl;
+			if (fail > 3) {
+				cout << "Please Use the Number." << endl;
+			}
+			cin >> choiceStr;
+			stringstream(choiceStr) >> choice;
+		} while (!(choice >= 1 && choice <= 3) || choice == 0);
+		if (choice == 1) {
+			int rand = console.RandomNumber();
+			if (rand <= 40) {
+				cout << "You hit the " << mon.name << " for " << c.attack << " Damage." << '\n';
+				mon.currentHealthPoints -= c.attack;
+				cout << mon.name << " Attacks!" << '\n'
+					<< "You take " << mon.attack << " damage." << endl;
+				c.currentHealthPoints -= mon.attack;
+				console.Sleep(2);
+			}
+			else if (rand > 40 && rand <= 80) {
+				cout << mon.name << "Defends itself." << '\n';
+				cout << "You hit the " << mon.name << " for " << (c.attack / 2) << " Damage." << endl;
+				mon.currentHealthPoints -= (c.attack / 2);
+				console.Sleep(2);
+			}
+			else {
+				cout << mon.name << " attempts to flee." << '\n';
+				cout << "You hit the " << mon.name << " for " << (c.attack * 1.5) << " Damage." << endl;
+				mon.currentHealthPoints -= (c.attack * 1.5);
+				console.Sleep(2);
+			}
+		}
+		else if (choice == 2) {
+			int rand = console.RandomNumber();
+			if (rand <= 40) {
+				cout << mon.name << " Attacks!" << '\n'
+					<< "You take " << (mon.attack / 2) << " damage." << endl;
+				c.currentHealthPoints -= (mon.attack / 2);
+				console.Sleep(2);
+			}
+			else if (rand > 40 && rand <= 80) {
+				cout << mon.name << "Defends itself." << '\n'
+					<< "Nothing happens." << endl;
+				console.Sleep(2);
+			}
+			else {
+				cout << mon.name << " attempts to flee." << '\n'
+					<< mon.name << " escapes." << endl;
+				fighting = false;
+				console.Sleep(2);
+			}
+		}
+		else if (choice == 3) {
+			int rand = console.RandomNumber();
+			if (rand > 70) {
+				cout << "You Manage to Escape." << endl;
+				fighting = false;
+			}
+			else {
+				cout << "You were not fast enough to slip away."
+					<< "The " << mon.name << " gets a free Crit for your mistake." << endl;
+				c.currentHealthPoints -= (mon.attack * 1.5);
+			}
+		}
+	} while ((mon.currentHealthPoints > 0 && c.currentHealthPoints > 0) && (fighting));
+	if (Death(c.currentHealthPoints)) {
+		main();
+	}
+	else if (mon.currentHealthPoints < 0) {
+		cout << "Congradulations. You Have killed the " << mon.name << "." << '\n'
+			<< "You loot its body for its goods." << endl;
+		c.backpack = LootItems(c.backpack, mon.name);
+		c.currentGold += LootGold(mon.name);
+		c.currentExp += ExpGain(mon.name);
+		if (c.currentExp > c.nextLevelExp) {
+			c = LevelUp(c);
+		}
+		return c;
+	}
+	else if (fighting) {
+		return c;
+	}
 }
 
 bool Death(int currentHealthPoints) {
@@ -354,6 +446,115 @@ bool Death(int currentHealthPoints) {
 	}
 	else {
 		return false;
+	}
+}
+
+vector<string> LootItems(vector<string> backpack, string monsterName) {
+	int rand = console.RandomNumber();
+	vector<string> bkpk = backpack;
+	if (monsterName == "Goblin") {
+		bkpk.push_back("Goblin Ear");
+		bkpk.push_back("Tattered Cloth");
+		if (rand > 60) {
+			bkpk.push_back("Goblin Claw");
+			bkpk.push_back("Goblin Ear");
+			bkpk.push_back("Copper Ore");
+		}
+		if (rand > 75) {
+			bkpk.push_back("Goblin Claw");
+			bkpk.push_back("Goblin Tooth");
+		}
+		if (rand > 90) {
+			int newRand = console.RandomNumber();
+			if (newRand <= 33) {
+				bkpk.push_back("Copper Dagger");
+			}
+			else if (newRand > 33 && newRand <= 66) {
+				bkpk.push_back("Copper Sword");
+			}
+			else {
+				bkpk.push_back("Solid Staff");
+			}
+		}
+		return bkpk;
+	}
+	else if (monsterName == "Hobgoblin") {
+		bkpk.push_back("Hobgoblin Ear");
+		bkpk.push_back("Hunk of Copper");
+		bkpk.push_back("Tattered Leather Pieces");
+		if (rand > 60) {
+			bkpk.push_back("Hobgoblin Claw");
+			bkpk.push_back("Hobgoblin Ear");
+			bkpk.push_back("Hunk of Copper");
+		}
+		if (rand > 75) {
+			bkpk.push_back("Hobgoblin Tooth");
+			bkpk.push_back("Leather");
+		}
+		if (rand > 90) {
+			int newRand = console.RandomNumber();
+			if (newRand <= 33) {
+				bkpk.push_back("Iron Dagger");
+			}
+			else if (newRand > 33 && newRand <= 66) {
+				bkpk.push_back("Iron Sword");
+			}
+			else {
+				bkpk.push_back("Foresters Staff");
+			}
+		}
+		return bkpk;
+	}
+	else if (monsterName == "Ogre") {
+		bkpk.push_back("Ogre Ear");
+		bkpk.push_back("Hunk of Iron");
+		bkpk.push_back("Leather");
+		if (rand > 60) {
+			bkpk.push_back("Ogre Claw");
+			bkpk.push_back("Ogre Ear");
+			bkpk.push_back("Hunk of Iron");
+		}
+		if (rand > 75) {
+			bkpk.push_back("Ogre Tooth");
+			bkpk.push_back("Hardened Leather");
+		}
+		if (rand > 90) {
+			int newRand = console.RandomNumber();
+			if (newRand <= 33) {
+				bkpk.push_back("Steel Dagger");
+			}
+			else if (newRand > 33 && newRand <= 66) {
+				bkpk.push_back("Steel Sword");
+			}
+			else {
+				bkpk.push_back("Druids Staff");
+			}
+		}
+		return bkpk;
+	}
+}
+
+int LootGold(string monsterName) {
+	if (monsterName == "Goblin") {
+		return 10;
+	}
+	else if (monsterName == "Hobgoblin") {
+		return 25;
+	}
+	else if (monsterName == "Ogre") {
+		return 50;
+	}
+}
+
+int ExpGain(string monsterName) {
+	if (monsterName == "Goblin") {
+		return 3;
+	}
+	else if (monsterName == "Hobgoblin") {
+		return 10;
+	}
+	else if (monsterName == "Ogre") {
+		return 35;
 	}
 }
 
@@ -383,7 +584,6 @@ Character Shop(Character player) {
 }
 
 Character Rest(Character player) {
-	console.ClearScreen();
 	Character c = player;
 	cout << "You rest at a nearby Shrine, and your wounds have time to heal." << '\n';
 	c.currentHealthPoints = c.maxHealthPoints;

@@ -1,16 +1,17 @@
-﻿  stdafx.cpp
-  RPGame.cpp
-c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(250): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(261): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(266): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-  OffHand.cpp
-  Monsters.cpp
-  MainHand.cpp
-  Items.cpp
-  Console.cpp
-  Character.cpp
-  Armour.cpp
-  Generating Code...
-c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(341): warning C4715: 'Death': not all control paths return a value
+﻿  RPGame.cpp
+c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(262): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(275): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(283): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(370): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
+c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(379): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
+c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(385): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
+c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(422): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(229): warning C4715: 'Hunt': not all control paths return a value
+c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(289): warning C4715: 'HuntSmallGame': not all control paths return a value
+c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(331): warning C4715: 'HuntMonsters': not all control paths return a value
+c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(439): warning C4715: 'Fight': not all control paths return a value
+c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(535): warning C4715: 'LootItems': not all control paths return a value
+c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(547): warning C4715: 'LootGold': not all control paths return a value
+c:\users\onshore\documents\visual studio 2017\projects\rpgame\rpgame\rpgame.cpp(559): warning C4715: 'ExpGain': not all control paths return a value
   RPGame.vcxproj -> C:\Users\Onshore\Documents\Visual Studio 2017\Projects\RPGame\Debug\RPGame.exe
   RPGame.vcxproj -> C:\Users\Onshore\Documents\Visual Studio 2017\Projects\RPGame\Debug\RPGame.pdb (Partial PDB)

@@ -1,0 +1,12 @@
+Goblin
+15
+3
+2
+Hobgoblin
+30
+6
+4
+Ogre
+75
+12
+8
