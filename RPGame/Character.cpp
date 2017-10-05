@@ -47,17 +47,19 @@ void Character::setcharvalues(std::string allstats) {
 	defence = std::ceil((strength + dexterity) / 1.5);
 }
 
-void Character::Clear() {
-	name.clear();
-	CharacterClass.clear();
-	level = 0;
-	strength = 0;
-	dexterity = 0;
-	intellegence = 0;
-	currentGold = 0;
-	currentExp = 0;
-	nextLevelExp = 0;
-	maxHealthPoints = 0;
-	currentHealthPoints = 0;
-	backpack.clear();
+Character Character::Clear(Character character) {
+	Character c = character;
+	c.name.clear();
+	c.CharacterClass.clear();
+	c.level = 0;
+	c.strength = 0;
+	c.dexterity = 0;
+	c.intellegence = 0;
+	c.currentGold = 0;
+	c.currentExp = 0;
+	c.nextLevelExp = 0;
+	c.maxHealthPoints = 0;
+	c.currentHealthPoints = 0;
+	c.backpack.clear();
+	return c;
 }

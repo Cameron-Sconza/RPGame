@@ -12,31 +12,36 @@ void LoadGame();
 Console console;
 
 int main() {
-	int mainMenu = 0;
+	bool appIsRunning = true;
 	do {
-		string mainMenuStr;
-		int Fail = 0;
-		cout << "Please Select Numbered Option Below" << '\n'
-			<< "1. New Game." << '\n'
-			<< "2. Continue Game." << '\n'
-			<< "3. Quit" << endl; 
-		if (Fail > 3) {
-			cout << "Use The Number To Select an Option." << endl;
+		int mainMenu = 0;
+		int fail = 0;
+		do {
+			console.ClearScreen();
+			string mainMenuStr;
+			cout << "Please Select Numbered Option Below" << '\n'
+				<< "1. New Game." << '\n'
+				<< "2. Continue Game." << '\n'
+				<< "3. Quit" << endl;
+			if (fail > 3) {
+				cout << "Use The Number To Select an Option." << endl;
+			}
+			cin >> mainMenuStr;
+			stringstream(mainMenuStr) >> mainMenu;
+			fail++;
+		} while (!(mainMenu >= 1 && mainMenu <= 3) || mainMenu == 0);
+		if (mainMenu == 1) {
+			NewGame();
 		}
-		cin >> mainMenuStr;
-		stringstream(mainMenuStr) >> mainMenu;
-		Fail++;
-	} while (!(mainMenu >= 1 && mainMenu <= 3) || mainMenu == 0);
-	if (mainMenu == 1) {
-		NewGame();
-	}
-	else if (mainMenu == 2) {
-		LoadGame();
-	}
-	else {
-		cout << "Closing Application." << endl;
-		return 0;
-	}
+		else if (mainMenu == 2) {
+			LoadGame();
+		}
+		else {
+			cout << "Closing Application." << endl;
+			appIsRunning = false;
+		}
+	} while (appIsRunning);
+	return 0;
 }
 
 void PlayGame(Character player);
@@ -141,9 +146,9 @@ void PlayGame(Character player) {
 		console.ClearScreen();
 		playing = true;
 		int choice = 0;
+		int attemptCount = 0;
 		do {
 			string choiceStr;
-			int attemptCount = 0;
 			cout << "Please Select Numbered Option Below" << '\n'
 				<< "1. Save Game." << '\n'
 				<< "2. Hunt." << '\n'
@@ -164,6 +169,9 @@ void PlayGame(Character player) {
 			break;
 		case(2):
 			c = Hunt(c);
+			if (c.level == 0) {
+				playing = false;
+			}
 			break;
 		case(3):
 			c = Shop(c);
@@ -176,7 +184,6 @@ void PlayGame(Character player) {
 			break;
 		}
 	} while (playing);
-	main();
 }
 
 void SaveGame(Character player) {
@@ -201,34 +208,42 @@ Character HuntMonsters(Character character);
 
 Character Hunt(Character player) {
 	Character c = player;
-	console.ClearScreen();
-	int choice = 0;
-	int fail = 0;
+	bool hunting = true;
 	do {
-		string choiceStr;
-		cout << "What would you like to hunt?" << '\n'
-			<< "1. Small Game." << '\n'
-			<< "2. Monsters." << '\n'
-			<< "3. Back." << endl;
-		if (fail > 3) {
-			cout << "Please Use the Number." << endl;
+		console.ClearScreen();
+		int choice = 0;
+		int fail = 0;
+		do {
+			string choiceStr;
+			cout << "What would you like to hunt?" << '\n'
+				<< "1. Small Game." << '\n'
+				<< "2. Monsters." << '\n'
+				<< "3. Back." << endl;
+			if (fail > 3) {
+				cout << "Please Use the Number." << endl;
+			}
+			cin >> choiceStr;
+			stringstream(choiceStr) >> choice;
+			fail++;
+		} while (!(choice >= 1 && choice <= 3) || choice == 0);
+		if (choice == 1) {
+			c = HuntSmallGame(c);
+			if (c.level == 0) {
+				hunting = false;
+			}
 		}
-		cin >> choiceStr;
-		stringstream(choiceStr) >> choice;
-		fail++;
-	} while (!(choice >= 1 && choice <= 3) || choice == 0);
-	if (choice == 1) {
-		return HuntSmallGame(c);
-	}
-	else if (choice == 2) {
-		return HuntMonsters(c);
-	}
-	else if (choice == 3) {
-		return c;
-	}
+		else if (choice == 2) {
+			c = HuntMonsters(c); 
+			if (c.level == 0) {
+				hunting = false;
+			}
+		}
+		else if (choice == 3) {
+			hunting = false;
+		}
+	} while (hunting);
+	return c;
 }
-
-bool Death(int currentHealthPoints);
 
 Character HuntSmallGame(Character character) {
 	Character c = character;
@@ -236,33 +251,34 @@ Character HuntSmallGame(Character character) {
 	if (rand <= 40) {
 		cout << "You managed to find hunt down some rabbits and birds, but nothing worth while." << endl;
 		c.backpack.push_back("Raw Meat");
-		console.Sleep(3);
+		console.Sleep(1);
 		return c;
 	}
 	else if (rand > 40 && rand <= 70) {
 		cout << "This was a good hunt. You managed to run into a small family of Deer." << endl;
 		c.backpack.push_back("Raw Meat");
 		c.backpack.push_back("Raw Meat");
-		c.backpack.push_back("Raw Meat");
-		c.backpack.push_back("Raw Meat");
 		c.backpack.push_back("Raw Hide");
-		c.backpack.push_back("Raw Hide");
-		console.Sleep(3);
+		console.Sleep(1);
 		return c;
 	}
 	else if (rand > 70 && rand <= 90) {
 		cout << "You fail to find animals of any sorts." << endl;
-		console.Sleep(3);
+		console.Sleep(1);
 		return c;
 	}
 	else if (rand > 90 && rand > 100) {
 		cout << "Something managed to hunt you instead." << '\n'
 			<< "You lose 5 health." << endl;
-		c.currentHealthPoints -= 5;
-		Death(c.currentHealthPoints);
+		c.currentHealthPoints -= 5; 
+		if (c.currentHealthPoints < 0) {
+			cout << "You Have Died." << endl;
+			console.Sleep(3);
+			return c.Clear(c);
+		}
 		return c;
 	}
-	else if (rand == 100) {
+	else {
 		cout << "You were seen by a Dragon." << endl;
 		int newRand = console.RandomNumber();
 		if (newRand <= 50) {
@@ -272,16 +288,20 @@ Character HuntSmallGame(Character character) {
 		else if (newRand > 50 && newRand <= 80) {
 			cout << "It noticed you and tried to kill you." << endl;
 			c.currentHealthPoints -= 25;
-			if (Death(c.currentHealthPoints)) {
-				main();
+			if (c.currentHealthPoints < 0) {
+				cout << "You Have Died." << endl;
+				console.Sleep(3);
+				return c.Clear(c);
 			}
 			return c;
 		}
 		else {
 			cout << "It Manages to get a direct hit on you." << endl;
 			c.currentHealthPoints -= 50;
-			if (Death(c.currentHealthPoints)) {
-				main();
+			if (c.currentHealthPoints < 0) {
+				cout << "You Have Died." << endl;
+				console.Sleep(3);
+				return c.Clear(c);
 			}
 			return c;
 		}
@@ -325,7 +345,7 @@ Character HuntMonsters(Character character) {
 		mon = mon.getAllMonsters()[2];
 		return Fight(mon, c);
 	}
-	else if (choice == 4) {
+	else {
 		return c;
 	}
 }
@@ -374,7 +394,7 @@ Character Fight(Monsters monster, Character character) {
 				console.Sleep(2);
 			}
 			else if (rand > 40 && rand <= 80) {
-				cout << mon.name << "Defends itself." << '\n';
+				cout << mon.name << " Defends itself." << '\n';
 				cout << "You hit the " << mon.name << " for " << (c.attack / 2) << " Damage." << endl;
 				mon.currentHealthPoints -= (c.attack / 2);
 				console.Sleep(2);
@@ -419,8 +439,10 @@ Character Fight(Monsters monster, Character character) {
 			}
 		}
 	} while ((mon.currentHealthPoints > 0 && c.currentHealthPoints > 0) && (fighting));
-	if (Death(c.currentHealthPoints)) {
-		main();
+	if (c.currentHealthPoints < 0) {
+		cout << "You Have Died." << endl;
+		console.Sleep(3);
+		return c.Clear(c);
 	}
 	else if (mon.currentHealthPoints < 0) {
 		cout << "Congradulations. You Have killed the " << mon.name << "." << '\n'
@@ -430,22 +452,15 @@ Character Fight(Monsters monster, Character character) {
 		c.currentExp += ExpGain(mon.name);
 		if (c.currentExp > c.nextLevelExp) {
 			c = LevelUp(c);
+			console.Sleep(1);
 		}
 		return c;
 	}
 	else if (fighting) {
 		return c;
 	}
-}
-
-bool Death(int currentHealthPoints) {
-	if (currentHealthPoints < 0) {
-		cout << "You Have Died" << endl;
-		console.Sleep(3);
-		return true;
-	}
-	else {
-		return false;
+	else { 
+		return c;
 	}
 }
 
@@ -532,6 +547,9 @@ vector<string> LootItems(vector<string> backpack, string monsterName) {
 		}
 		return bkpk;
 	}
+	else {
+		return bkpk;
+	}
 }
 
 int LootGold(string monsterName) {
@@ -544,6 +562,9 @@ int LootGold(string monsterName) {
 	else if (monsterName == "Ogre") {
 		return 50;
 	}
+	else {
+		return 0;
+	}
 }
 
 int ExpGain(string monsterName) {
@@ -555,6 +576,9 @@ int ExpGain(string monsterName) {
 	}
 	else if (monsterName == "Ogre") {
 		return 35;
+	}
+	else {
+		return 0;
 	}
 }
 

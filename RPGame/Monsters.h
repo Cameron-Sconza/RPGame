@@ -2,8 +2,8 @@
 class Monsters
 {
 public:
-	int maxHealthPoints;
-	int currentHealthPoints;
+	double maxHealthPoints;
+	double currentHealthPoints;
 	int attack;
 	int defence;
 	std::string name;

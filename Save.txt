@@ -1,18 +1,47 @@
 Cameron
 Rogue
-1
+2
 4
 6
 3
-15
-0
-10
+65
+3
+25
 Rusty Dagger
 Rusty Dagger
 Ragged Leather Armour
 Raw Meat
 Raw Meat
+Raw Hide
 Raw Meat
 Raw Meat
 Raw Hide
+Raw Meat
+Raw Meat
+Raw Meat
 Raw Hide
+Goblin Ear
+Tattered Cloth
+Goblin Ear
+Tattered Cloth
+Raw Meat
+Raw Meat
+Raw Hide
+Goblin Ear
+Tattered Cloth
+Goblin Claw
+Goblin Ear
+Copper Ore
+Goblin Ear
+Tattered Cloth
+Goblin Claw
+Goblin Ear
+Copper Ore
+Goblin Ear
+Tattered Cloth
+Goblin Claw
+Goblin Ear
+Copper Ore
+Goblin Claw
+Goblin Tooth
+Raw Meat

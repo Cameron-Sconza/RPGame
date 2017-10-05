@@ -25,5 +25,5 @@ public:
 	OffHand * offHand;
 	Armour * armour;
 	void setcharvalues(std::string allstats);
-	void Clear();
+	Character Clear(Character character);
 };
